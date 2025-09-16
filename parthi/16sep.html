@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RetroMDb - The Internet Movie Database</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Courier+New:wght@400;700&family=Arial:wght@400;700');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+      body {
+    font-family: 'Courier New', Courier, 'Lucida Console', Monaco, monospace;
+    background-color: #000000ff;
+    background-size: cover;
+    color: #0a0a0aff;
+    min-height: 100vh;
+}
+
+
+
+        
+        .retro-grid {
+        background-image: 
+            linear-gradient(rgba(4, 1, 1, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 9, 9, 0.05) 1px, transparent 1px);
+        background-size: 20px 20px;
+        }
+
+        
+        .header {
+            background:rgba(0, 0, 0, 0.9);
+            padding: 15px 0;
+            box-shadow: 0 4px 8px rgba(28, 111, 179, 0.5);
+            border-bottom: 2px solid #ffdd00;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #060606ff, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent; /* Fallback */
+        }
+
+        
+        .search-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .search-input {
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 2px solid #ffdd00;
+            border-radius: 25px;
+            background: rgba(0,0,0,0);
+            color: #fff;
+            width: 300px;
+        }
+        
+        .search-input::placeholder {
+            color: #ccc;
+        }
+        
+        .search-btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #ffdd00, #ff6b35);
+            border: none;
+            border-radius: 25px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .search-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .nav-menu {
+            background: rgba(0, 0, 0, 0.85);;
+            padding: 10px 0;
+            border-bottom: 2px solid #00ffff;
+        }
+        
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-link {
+            color: #eb1567ff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover {
+            background: rgba(0,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .featured-section {
+    background: #000000; /* Solid black */
+    border: 2px solid #0ad711ff;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 0 20px rgba(0,255,255,0.3);
+}
+
+        
+        .section-title {
+            font-size: 28px;
+            color: #ffdd00;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ff6b35;
+            padding-bottom: 10px;
+        }
+        
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .movie-card {
+            background: rgba(0, 0, 0, 0.85);
+            border: 2px solid #ff6b35;
+            border-radius: 10px;
+            padding: 15px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .movie-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255,107,53,0.4);
+            border-color: #ffdd00;
+        }
+        
+        .movie-poster {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(45deg, #333, #666);
+            border: 2px solid #00ffff;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #00ffff;
+            margin-bottom: 10px;
+        }
+        .movie-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* keeps aspect ratio and fills container */
+            display: block;
+        }
+        
+        .movie-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffdd00;
+            margin-bottom: 5px;
+        }
+        
+        .movie-year {
+            color: #00ffff;
+            font-size: 14px;
+        }
+        
+        .movie-rating {
+            color: #ff6b35;
+            font-weight: bold;
+        }
+        
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, rgba(7, 5, 5, 0.2), rgba(0,0,0,0.85));
+            border: 2px solid #00ffff;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #ffdd00;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+        
+        .stat-label {
+            color: #00ffff;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .footer {
+            background: rgba(0, 0, 0, 0.9); 
+            border-top: 3px solid #ff6b35;
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+        
+        .footer-text {
+            color: #ccc;
+            font-size: 14px;
+        }
+        
+        .retro-button {
+            background: linear-gradient(135deg, #ff6b35, #ffdd00);
+            border: 2px solid #00ffff;
+            color: #101010ff;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+        }
+        
+        .retro-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(255,107,53,0.4);
+        }
+        
+        .glitch {
+            animation: glitch 2s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 90%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-2px); }
+            40% { transform: translateX(2px); }
+            60% { transform: translateX(-1px); }
+            80% { transform: translateX(1px); }
+        }
+        
+        .neon-glow {
+            text-shadow: 
+                0 0 5px currentColor,
+                0 0 10px currentColor,
+                0 0 15px currentColor,
+                0 0 20px currentColor;
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .search-input {
+                width: 250px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body class="retro-grid">
+    <header class="header">
+        <div class="header-content">
+            <div class="logo neon-glow">IMDb</div>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search movies, TV shows, actors...">
+                <button class="search-btn">SEARCH</button>
+            </div>
+        </div>
+    </header>
+    
+    <nav class="nav-menu">
+        <div class="nav-content">
+            <div class="nav-links">
+                <a href="#" class="nav-link">Movies</a>
+                <a href="#" class="nav-link">TV Shows</a>
+                <a href="#" class="nav-link">Celebrities</a>
+                <a href="#" class="nav-link">Top 250</a>
+                <a href="#" class="nav-link">Awards</a>
+                <a href="#" class="nav-link">News</a>
+            </div>
+        </div>
+    </nav>
+    
+    <main class="main-content">
+        <section class="featured-section">
+            <h2 class="section-title glitch">🎬 FEATURED MOVIES</h2>
+            <div class="movie-grid">
+                <a href="details.html?id=1" target="_blank" class="movie-link">
+                <div class="movie-card">
+            <div class="movie-poster">
+                <img src="https://s3.amazonaws.com/nightjarprod/content/uploads/sites/249/2025/07/02123317/63N9uy8nd9j7Eog2axPQ8lbr3Wj.jpg" alt="Blade Runner Poster">
+            </div>
+            <div class="movie-title">Blade Runner</div>
+            <div class="movie-year">1982</div>
+            <div class="movie-rating">★ 8.1/10</div>
+        </div>
+        </a>
+                <a href="details.html?id=2" target="_blank" class="movie-link">
+                <div class="movie-card">
+                   <div class="movie-poster">
+                <img src="https://m.media-amazon.com/images/I/51ikm0lmdNL._UF894,1000_QL80_.jpg" alt="Tron">
+            </div>
+            <div class="movie-title">Tron</div>
+            <div class="movie-year">2010</div>
+            <div class="movie-rating">★ 6.2/10</div>
+        </div>
+        </a>
+                <a href="details.html?id=3" target="_blank" class="movie-link">
+                <div class="movie-card">
+                    <div class="movie-poster">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-YbcuORbJbb9gEKJPqHl3O1mS5SCcFcZzxdW-ZAwx2uSI-1jN87WTxdwNmAgoEWhQjAxvgw">
+            </div>
+            <div class="movie-title">Terminator</div>
+            <div class="movie-year">1982</div>
+            <div class="movie-rating">★ 8.1/10</div>
+        </div>
+    </a>
+            <a href="details.html?id=4" target="_blank" class="movie-link">
+                <div class="movie-card">
+                    <div class="movie-poster">
+                <img src="https://image.tmdb.org/t/p/original/paZ5Bmiv7esLaBFs6gmubCTiEOO.jpg" alt="Deep Water">
+            </div>
+            <div class="movie-title">Deep Water</div>
+            <div class="movie-year">2022</div>
+            <div class="movie-rating">★ 5.5/10</div>
+        </div>
+        </a>
+            </div>
+        </section>
+        
+        <section class="stats-section">
+            <a href="https://www.imdb.com/chart/toptv/" target="_blank" class="movie-link">
+            <div class="stat-card">
+                <div class="stat-number">15M+</div>
+                <div class="stat-label">Movies & TV Shows</div>
+            </div>
+            </a>
+            <a href="https://www.imdb.com/chart/starmeter/" target="_blank" class="movie-link">
+            <div class="stat-card">
+                <div class="stat-number">250K+</div>
+                <div class="stat-label">Celebrities</div>
+            </div>
+            </a>
+            <a href="https://en.wikipedia.org/wiki/IMDb" target="_blank" class="movie-link">
+            <div class="stat-card">
+                <div class="stat-number">500M+</div>
+                <div class="stat-label">Monthly Visits</div>
+            </div>
+            </a>
+            <a href="https://en.wikipedia.org/wiki/IMDb" target="_blank" class="movie-link">
+            <div class="stat-card">
+                <div class="stat-number">85M+</div>
+                <div class="stat-label">Registered Users</div>
+            </div>
+            </a>
+        </section>
+        
+        <section class="featured-section">
+            <h2 class="section-title">🏆 TOP RATED CLASSICS</h2>
+            <div class="movie-grid">
+                 <a href="details.html?id=5" target="_blank" class="movie-link">
+                <div class="movie-card">
+                <div class="movie-poster">
+                    <img src="https://neiloseman.com/wp-content/uploads/2022/04/citizen_kane_silhouette.jpg" alt="Citizen Kane Poster">
+                </div>
+                <div class="movie-title">Citizen Kane</div>
+                <div class="movie-year">1941</div>
+                <div class="movie-rating">★ 8.2/10</div>
+            </div>
+            </a>
+                 <a href="details.html?id=6" target="_blank" class="movie-link">
+                 <div class="movie-card">
+                <div class="movie-poster">
+                    <img src="https://resizing.flixster.com/ai2GNkpxdxnU4pSv4NVjX5mL3O8=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p651_p_v8_az.jpg" alt="Casablanca">
+                </div>
+                <div class="movie-title">Casablanca</div>
+                <div class="movie-year">1942</div>
+                <div class="movie-rating">★ 8.5/10</div>
+            </div>
+            </a>
+                 <a href="details.html?id=7" target="_blank" class="movie-link">
+                <div class="movie-card">
+                <div class="movie-poster">
+                    <img src="https://m.media-amazon.com/images/I/71KsN75wXlS._UF1000,1000_QL80_.jpg" alt="Vertigo">
+                </div>
+                <div class="movie-title">Vertigo</div>
+                <div class="movie-year">1958</div>
+                <div class="movie-rating">★ 8.2/10</div>
+            </div>
+            </a>
+                 <a href="details.html?id=8" target="_blank" class="movie-link">
+                <div class="movie-card">
+                <div class="movie-poster">
+                    <img src="https://play-lh.googleusercontent.com/nGEs1sJAS74RgAnT0BSFyo6eTRDcZOTNBbCmjYT26G0NkA4g0ymtzmOYgcru4o8Dl6qCDYygtOKFYUQgYDU" alt="2001 : A Space Odyssey">
+                </div>
+                <div class="movie-title">2001 : A Space Odyssey</div>
+                <div class="movie-year">1968</div>
+                <div class="movie-rating">★ 8.3/10</div>
+            </div>
+        </a>
+        </section>
+        
+        <div style="text-align: center; margin: 40px 0;">
+            <a href="#" class="retro-button">VIEW TOP 250</a>
+            <a href="#" class="retro-button">BROWSE BY GENRE</a>
+            <a href="#" class="retro-button">WHAT'S POPULAR</a>
+        </div>
+    </main>
+    
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-text">
+                © 2024 RetroMDb.com - The Ultimate Movie Database Experience<br>
+                Bringing you the classics with that vintage digital vibe
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Add some interactive effects
+        document.querySelectorAll('.movie-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+        
+        // Search functionality
+        document.querySelector('.search-btn').addEventListener('click', function() {
+            const query = document.querySelector('.search-input').value;
+            if (query) {
+                alert(`Searching for: ${query}\n(This is a demo - search functionality would be implemented here)`);
+            }
+        });
+        
+        document.querySelector('.search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.querySelector('.search-btn').click();
+            }
+        });
+        
+        // Add some retro loading effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.movie-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

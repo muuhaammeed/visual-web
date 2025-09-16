@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie Details - RetroMDb</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: url("https://img.myloview.com.br/posters/retrowave-and-synthwave-style-background-with-neon-laser-grid-extending-to-the-horizon-700-241166829.jpg") no-repeat center center fixed;
+      background-size: cover;
+      color: #f0f0f0;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .header {
+      background: rgba(0,0,0,0.7);
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      border-bottom: 2px solid #ffdd00;
+    }
+    .back-btn {
+      background: linear-gradient(135deg, #ff6b35, #ffdd00);
+      border: 2px solid #00ffff;
+      color: #000;
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-right: 20px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 30px auto;
+      background: rgba(0,0,0,0.7);
+      border: 2px solid #00ffff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0,255,255,0.4);
+    }
+    .poster {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .poster img {
+      max-width: 300px;
+      border: 2px solid #ff6b35;
+      border-radius: 8px;
+    }
+    .trailer iframe {
+      width: 100%;
+      height: 450px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+    .info h2 {
+      color: #ffdd00;
+    }
+    .info p {
+      margin: 8px 0;
+      color: #ccc;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <button class="back-btn" onclick="window.location.href='16sep.html'">← Back</button>
+    <h1 id="movie-title">Movie Details</h1>
+  </header>
+
+  <div class="container">
+    <div class="poster">
+      <img id="movie-poster" src="" alt="Poster">
+    </div>
+    <div class="trailer">
+      <iframe id="movie-trailer" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <div class="info">
+      <h2 id="title-year"></h2>
+      <p><strong>Genre:</strong> <span id="genre"></span></p>
+      <p><strong>Director:</strong> <span id="director"></span></p>
+      <p><strong>Cast:</strong> <span id="cast"></span></p>
+      <p id="description"></p>
+    </div>
+  </div>
+
+  <script>
+    // All 8 movies with embed trailer links
+    const movies = {
+      1: {
+        title: "Blade Runner",
+        year: "1982",
+        poster: "https://s3.amazonaws.com/nightjarprod/content/uploads/sites/249/2025/07/02123317/63N9uy8nd9j7Eog2axPQ8lbr3Wj.jpg",
+        trailer: "https://www.youtube.com/embed/eogpIG53Cis",
+        genre: "Sci-Fi, Thriller",
+        director: "Ridley Scott",
+        cast: "Harrison Ford, Rutger Hauer",
+        desc: "A blade runner must pursue and terminate four replicants who stole a ship in space."
+      },
+      2: {
+        title: "Tron",
+        year: "2010",
+        poster: "https://m.media-amazon.com/images/I/51ikm0lmdNL._UF894,1000_QL80_.jpg",
+        trailer: "https://www.youtube.com/embed/L9szn1QQfas",
+        genre: "Sci-Fi, Adventure",
+        director: "Joseph Kosinski",
+        cast: "Jeff Bridges, Garrett Hedlund",
+        desc: "The son of a virtual world designer goes looking for his father and ends up inside the digital world."
+      },
+      3: {
+        title: "Terminator",
+        year: "1984",
+        poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-YbcuORbJbb9gEKJPqHl3O1mS5SCcFcZzxdW-ZAwx2uSI-1jN87WTxdwNmAgoEWhQjAxvgw",
+        trailer: "https://www.youtube.com/embed/k64P4l2Wmeg",
+        genre: "Action, Sci-Fi",
+        director: "James Cameron",
+        cast: "Arnold Schwarzenegger, Linda Hamilton",
+        desc: "A cyborg assassin is sent back in time to kill Sarah Connor."
+      },
+      4: {
+        title: "Deep Water",
+        year: "2022",
+        poster: "https://image.tmdb.org/t/p/original/paZ5Bmiv7esLaBFs6gmubCTiEOO.jpg",
+        trailer: "https://www.youtube.com/embed/90JsrQwE5CA",
+        genre: "Drama, Thriller",
+        director: "Adrian Lyne",
+        cast: "Ben Affleck, Ana de Armas",
+        desc: "A well-to-do husband allows his wife to have affairs in order to avoid divorce, but things turn dark."
+      },
+      5: {
+        title: "Citizen Kane",
+        year: "1941",
+        poster: "https://neiloseman.com/wp-content/uploads/2022/04/citizen_kane_silhouette.jpg",
+        trailer: "https://www.youtube.com/embed/8dxh3lwdOFw",
+        genre: "Drama, Mystery",
+        director: "Orson Welles",
+        cast: "Orson Welles, Joseph Cotten",
+        desc: "Following the death of publishing tycoon Charles Foster Kane, reporters scramble to uncover the meaning of his final word."
+      },
+      6: {
+        title: "Casablanca",
+        year: "1942",
+        poster: "https://resizing.flixster.com/ai2GNkpxdxnU4pSv4NVjX5mL3O8=/fit-in/705x460/v2/https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/p651_p_v8_az.jpg",
+        trailer: "https://www.youtube.com/embed/BkL9l7qovsE",
+        genre: "Drama, Romance",
+        director: "Michael Curtiz",
+        cast: "Humphrey Bogart, Ingrid Bergman",
+        desc: "A cynical expatriate encounters a former lover, with unforeseen complications."
+      },
+      7: {
+        title: "Vertigo",
+        year: "1958",
+        poster: "https://m.media-amazon.com/images/I/71KsN75wXlS._UF1000,1000_QL80_.jpg",
+        trailer: "https://www.youtube.com/embed/95o-QM-lz8g",
+        genre: "Mystery, Thriller",
+        director: "Alfred Hitchcock",
+        cast: "James Stewart, Kim Novak",
+        desc: "A retired detective with acrophobia investigates strange activities of an old friend's wife."
+      },
+      8: {
+        title: "2001: A Space Odyssey",
+        year: "1968",
+        poster: "https://play-lh.googleusercontent.com/nGEs1sJAS74RgAnT0BSFyo6eTRDcZOTNBbCmjYT26G0NkA4g0ymtzmOYgcru4o8Dl6qCDYygtOKFYUQgYDU",
+        trailer: "https://www.youtube.com/embed/oR_e9y-bka0",
+        genre: "Sci-Fi, Adventure",
+        director: "Stanley Kubrick",
+        cast: "Keir Dullea, Gary Lockwood",
+        desc: "Humanity finds a mysterious object buried beneath the lunar surface and sets off on a journey to Jupiter."
+      }
+    };
+
+    // Get movie ID from URL
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    if (movies[id]) {
+      const m = movies[id];
+      document.getElementById("movie-title").textContent = m.title;
+      document.getElementById("movie-poster").src = m.poster;
+      // autoplay + mute to bypass browser restrictions
+      document.getElementById("movie-trailer").src = m.trailer + "?autoplay=1&mute=1";
+      document.getElementById("title-year").textContent = `${m.title} (${m.year})`;
+      document.getElementById("genre").textContent = m.genre;
+      document.getElementById("director").textContent = m.director;
+      document.getElementById("cast").textContent = m.cast;
+      document.getElementById("description").textContent = m.desc;
+    } else {
+      document.querySelector(".container").innerHTML = "<h2>Movie not found!</h2>";
+    }
+  </script>
+</body>
+</html>
